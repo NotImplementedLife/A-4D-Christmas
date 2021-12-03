@@ -1,0 +1,5 @@
+build/
+.betelgeuse_supervisor
+*.elf
+*.gba
+*.sav
