@@ -5,12 +5,14 @@
 #include <gba_input.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "SRAM.hpp"
 #include "main_scene.hpp"
 
 int main(void) 
 {
+	srand(time(NULL));
 	irqInit();
 	irqEnable(IRQ_VBLANK);
 	

@@ -1,13 +1,12 @@
 #include "main_scene.hpp"
 
-#include <gba_console.h>
-#include <gba_video.h>
-#include <gba_interrupt.h>
-#include <gba_systemcalls.h>
-#include <gba_input.h>
+#include <gba.h>
+
+#include <stdlib.h>
 
 #include "vbuffer.hpp"
 #include "sphere.hpp"
+#include "enemy.hpp"
 
 MainScene::MainScene()
 {
@@ -28,12 +27,49 @@ MainScene::MainScene()
 		for(u8 x=0;x<240;x++)
 			vBuffer::WMEM[240*y+x]=x;			
 	}		
-	vBuffer::draw();
+	vBuffer::draw();	
+}
+
+Enemy e(20,-0x0080,0x0080);
+
+void MainScene::update_enemies()
+{
+	for(int i=0;i<5;i++)
+	{
+		if(enemies[i]!=NULL)
+		{
+			enemies[i]->update();
+			//enemies[i]->update();
+			//enemies[i]->update();
+			//enemies[i]->update();			
+			enemies[i]->draw();	
+			//bool left =  enemies[i]->x>(240<<8) && (((enemies[i]->x+((enemies[i]->r/2)<<8)))&0x8000);
+			if(enemies[i]->y>=(160+enemies[i]->r/2)<<8)
+			{
+				delete enemies[i];
+				enemies[i]=NULL;
+			}
+		}
+		else
+		{
+			u8 sgn = rand()%2;
+			u16 dx = 30 + rand()%80;
+			if(sgn) dx=-dx;
+			u16 dy = 100+rand()%200;
+			enemies[i]=new Enemy(10+rand()%10, dx, dy);
+		}
+	}
 }
 
 void MainScene::run()
 {	
-	vBuffer::clear(2);	
+	vBuffer::clear(2);
+			
+	update_enemies();
+	VBlankIntrWait();
+	vBuffer::draw();
+	
+	return;
 	
 	//vBuffer::draw_line(120,82,73,80);
 	nSphere::make_sphere(k*0.2,k*0.2, 1,120, 100);
