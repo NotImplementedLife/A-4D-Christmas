@@ -9,34 +9,39 @@
 #include "enemy.hpp"
 #include "utils.hpp"
 
-#include "sleigh-sprite.h"
+#include "sleigh.hpp"
 
 MainScene::MainScene()
 {
-	SetMode(MODE_4 | BG2_ON);
+	SetMode(MODE_4 | BG2_ON | OBJ_ENABLE | OBJ_1D_MAP);
 	for(u16 i=0;i<256;i++)
 	{
-		u8 r=2, g=0, b=3, a=10;		
+		u8 r=4, g=0, b=5;		
 		((u16*)BG_PALETTE)[i]=RGB5(min(31,i+r),min(31,i+g),min(31,i+b));
 		
-	}	
-	/*for(u8 y=0;y<160;y++)
-	{
-		for(u8 x=0;x<240;x++)
-			vBuffer::WMEM[240*y+x]=y;			
-	}			
-	VBlankIntrWait();
-	vBuffer::draw();	
-	for(u8 y=0;y<160;y++)
-	{
-		for(u8 x=0;x<240;x++)
-			vBuffer::WMEM[240*y+x]=x;			
 	}		
-	vBuffer::draw();*/
 	VBlankIntrWait();
-	dmaCopy((void*)sleigh_spriteTiles,(void*)0x06013800,sleigh_spriteTilesLen);	
-	dmaCopy((void*)sleigh_spritePal,SPRITE_PALETTE,512);	
+	nSleigh::init();
 }
+
+void MainScene::input_handler()
+{
+	scanKeys();
+	u16 keys_down = keysDown();
+	u16 keys_held = keysHeld();
+	u16 keys_up = keysUp();	
+	
+	if((keys_up & (KEY_LEFT))|(keys_up & (KEY_RIGHT)))
+		nSleigh::set_tiles(nSleigh::sprite_0);
+		
+	
+	if(keys_held & KEY_LEFT)
+		nSleigh::move(-1);
+	else if(keys_held & KEY_RIGHT)
+		nSleigh::move(1);
+		
+}
+
 
 void MainScene::update_enemies()
 {
@@ -62,17 +67,23 @@ void MainScene::update_enemies()
 			if(sgn) dx=-dx;
 			u16 dy = 100+rand()%200;
 			enemies[i]=new Enemy(10+rand()%10, dx, dy);
-		}
+		}		
+		input_handler();
 	}
 }
 
 void MainScene::run()
 {	
-	vBuffer::clear(2);
+	vBuffer::clear(0);
 			
 	update_enemies();
+		
+	input_handler();
+	
 	VBlankIntrWait();
 	vBuffer::draw();
+	
+	nSleigh::update();
 	
 	return;
 	

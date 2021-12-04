@@ -11,6 +11,8 @@ public:
 	
 	void update_enemies();
 	
+	void input_handler();
+	
 	void run();	
 	
 	int k=0;
