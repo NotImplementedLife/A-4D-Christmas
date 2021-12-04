@@ -33,12 +33,7 @@ MainScene::MainScene()
 
 void MainScene::run()
 {	
-	for(u8 y=0;y<160;y++)
-	{
-		for(u8 x=0;x<240;x++)
-			//vBuffer::WMEM[240*y+x]=(u8)(y+k);	
-		vBuffer::WMEM[240*y+x]=0;
-	}		
+	vBuffer::clear(2);	
 	
 	//vBuffer::draw_line(120,82,73,80);
 	nSphere::make_sphere(k*0.2,k*0.2, 1,120, 100);

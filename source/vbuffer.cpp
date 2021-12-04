@@ -1,12 +1,15 @@
 #include "vbuffer.hpp"
 
 #include <gba_console.h>
-#include <gba_dma.h>
 #include <gba_video.h>
 #include <gba_interrupt.h>
 #include <gba_input.h>
 #include <string.h>
 #include <math.h>
+
+#include <gba_dma.h>
+#include "dma.hpp"
+
 
 #include "utils.hpp"
 #include "raster.hpp"
@@ -55,5 +58,10 @@ namespace vBuffer
 		u16 n;
 		nRaster::bresenham(n,points,x0,y0,x1,y1);
 		draw_points(n,points,color);
+	}
+	
+	void clear(u8 color, u8 line0, u8 line1)
+	{
+		dmaFillDouble(WMEM+240*line0,color|(color<<8)|(color<<16)|(color<<24),(line1-line0)*240);
 	}
 }
