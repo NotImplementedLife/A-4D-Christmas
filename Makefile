@@ -8,6 +8,10 @@ endif
 
 include $(DEVKITARM)/gba_rules
 
+GAME_TITLE = A 4D Christmas
+GAME_SUBTITLE1 = by NotImpLife
+GAME_SUBTITLE2 = for GBA Winter Jam 21
+
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
 # BUILD is the directory where object files & intermediate files will be placed
@@ -24,6 +28,7 @@ TARGET		:= $(notdir $(CURDIR))
 BUILD		:= build
 SOURCES		:= source
 INCLUDES	:= include
+GRAPHICS    := gfx
 DATA		:=
 MUSIC		:=
 
@@ -76,6 +81,7 @@ CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+PNGFILES	:=	$(foreach dir,$(GRAPHICS),$(notdir $(wildcard $(dir)/*.png)))
 
 ifneq ($(strip $(MUSIC)),)
 	export AUDIOFILES	:=	$(foreach dir,$(notdir $(wildcard $(MUSIC)/*.*)),$(CURDIR)/$(MUSIC)/$(dir))
@@ -100,7 +106,7 @@ export OFILES_BIN := $(addsuffix .o,$(BINFILES))
 
 export OFILES_SOURCES := $(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
 
-export OFILES := $(OFILES_BIN) $(OFILES_SOURCES)
+export OFILES := $(OFILES_BIN) $(OFILES_SOURCES) $(PNGFILES:.png=.o)
 
 export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES)))
 
@@ -135,6 +141,11 @@ $(OUTPUT).gba	:	$(OUTPUT).elf
 $(OUTPUT).elf	:	$(OFILES)
 
 $(OFILES_SOURCES) : $(HFILES)
+
+#---------------------------------------------------------------------------------
+%.s %.h	: %.png %.grit
+#---------------------------------------------------------------------------------
+	grit $< -fts -o$*
 
 #---------------------------------------------------------------------------------
 # The bin2o rule should be copied and modified

@@ -9,9 +9,9 @@
 #include <gba.h>
 namespace nSphere
 {	
-	u8 crt_points[3*points_count];
+	static u8 crt_points[3*points_count];
 
-	const float raw_points[3*points_count] = 
+	static const float raw_points[3*points_count] = 
 	{
 		+0.000000, -1.000000, +0.000000,
 		-0.345491, -0.809017, +0.475528,
@@ -57,15 +57,17 @@ namespace nSphere
 		+0.000000, +1.000000, +0.000000
 	};
 	
-	bool visible_points[points_count];
+	static bool visible_points[points_count];
 	
-	const int triangles_count=80;
+	static const int triangles_count=80;
 	
 	struct Triangle
 	{
 		u16 pid1, pid2, pid3;
 		bool draw1=1, draw2=1, draw3=1;
-	} triangles[] = 
+	};
+
+	static const Triangle triangles[] = 
 	{ 
 		{  0,  1,  2 },
 		{  0,  2,  3 },
@@ -123,12 +125,12 @@ namespace nSphere
 		{ 41, 40, 31 },
 	};
 	
-	bool triangle_is_visible(Triangle t)
+	static bool triangle_is_visible(Triangle t)
 	{
 		return visible_points[t.pid1] && visible_points[t.pid2] && visible_points[t.pid3];
 	}
 	
-	void triangle_draw(Triangle t)
+	static void triangle_draw(Triangle t)
 	{		
 		if(!triangle_is_visible(t)) return;
 		u8 x1 = crt_points[3*t.pid1], y1 = crt_points[3*t.pid1+1], z1 = crt_points[3*t.pid1+2];
