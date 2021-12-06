@@ -50,14 +50,15 @@ namespace vBuffer
 			u8 y=*(points++);
 			WMEM[240*y+x] = color;
 		}
-	}    
+	}    	
 	
-	void draw_line(s16 x0,s16 y0,s16 x1,s16 y1,u8 color=31)
-	{
-		static u8 *points = new u8[256];
-		u16 n;
-		nRaster::bresenham(n,points,x0,y0,x1,y1);
-		draw_points(n,points,color);
+	u8 points[256];
+	u16 points_count;
+	
+	void draw_line(s16 x0,s16 y0,s16 x1,s16 y1,u8 color)
+	{				
+		nRaster::bresenham(points_count,points,x0,y0,x1,y1);
+		draw_points(points_count,points,color);
 	}
 	
 	static const u16 mul_table_240[161] = 

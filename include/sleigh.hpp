@@ -14,6 +14,7 @@ namespace nSleigh
 	};
 	
 	extern u8 x;
+	const u8 y=124;
 	void init();
 	void update();
 	void set_tiles(u16 sprite_X);

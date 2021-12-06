@@ -45,7 +45,7 @@ namespace nSleigh
 	
 	void update()
 	{
-		spr(tile_number,x,124);
+		spr(tile_number,x,y);
 		updateOAM();
 	}
 	

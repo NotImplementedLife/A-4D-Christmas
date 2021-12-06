@@ -11,4 +11,7 @@ namespace vBuffer
 	void draw_points(int n,u8* points,u8 color);
 	void draw_line(s16 x0,s16 y0,s16 x1,s16 y1,u8 color);	
 	void clear(u8 color=0, u8 line0=0, u8 line1=160);
+		
+	extern u8 points[256];
+	extern u16 points_count;
 }

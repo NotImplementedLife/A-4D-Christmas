@@ -21,10 +21,10 @@ void Enemy::update()
 	P+=dP;
 	x+=dx;
 	y+=dy;
-	actual_r = (u8)(r*(factor));
+	actual_r = (u8)(r*factor);
 }
 
 void Enemy::draw()
-{
+{	
 	nSphere::make_sphere(T, P, actual_r, x>>8, y>>8);
 }

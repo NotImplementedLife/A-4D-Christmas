@@ -4,9 +4,8 @@
 
 class Enemy
 {
-private:
-	u8 actual_r;
 public:
+	u8 actual_r;
 	u16 x, y, dx, dy;
 	u8 r;
 	float dT,dP;

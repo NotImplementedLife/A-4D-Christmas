@@ -10,9 +10,11 @@ namespace nRaster
 		s16 dy = -abs(y1-y0);
 		s16 sy = y0<y1 ? 1: -1;
 		s16 err = dx + dy;
+		int k=0;
 		while(true)
 		{
-			if(x0>=0 && y0>=0 && x1<240 && y1<160)
+			k++;
+			if(x0>=0 && y0>=0 && x1<240 && y1<160 && k%2==0)
 			{
 				*(points++)=x0, *(points++)=y0;
 				n++;
