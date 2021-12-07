@@ -26,6 +26,18 @@ namespace nSleigh
 	
 	u8 x = 104;
 	u16 tile_number = 512;
+	u8 scr_y = y;
+	
+	void hide()
+	{
+		scr_y = 160;		
+	}
+	
+	void show() 
+	{ 
+		scr_y = y;	
+	}
+	
 	
 	void set_tiles(u16 sprite_X)
 	{
@@ -45,7 +57,7 @@ namespace nSleigh
 	
 	void update()
 	{
-		spr(tile_number,x,y);
+		spr(tile_number,x,scr_y);
 		updateOAM();
 	}
 	

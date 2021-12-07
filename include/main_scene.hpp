@@ -1,5 +1,6 @@
 #pragma once
 
+#include <gba.h>
 #include "enemy.hpp"
 
 class MainScene
@@ -7,6 +8,7 @@ class MainScene
 private:
 	Enemy* enemies[5] = {NULL, NULL, NULL, NULL, NULL};
 	bool laser = false;
+	u8 cooldown = 0;
 public:
 	MainScene();
 	

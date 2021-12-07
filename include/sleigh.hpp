@@ -19,4 +19,7 @@ namespace nSleigh
 	void update();
 	void set_tiles(u16 sprite_X);
 	void move(u16 dx);
+	
+	void show();
+	void hide();
 }

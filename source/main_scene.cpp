@@ -92,7 +92,7 @@ void MainScene::update_enemies()
 		vBuffer::draw_line(nSleigh::x+16,nSleigh::y+16,120,50,32);
 	for(int j=0;j<5;j++)
 	{
-		if(enemies[j]!=NULL)
+		if(!cooldown && enemies[j]!=NULL)
 		{
 			u16 ex = enemies[j]->x>>8;
 			u16 ey = enemies[j]->y>>8;
@@ -103,12 +103,14 @@ void MainScene::update_enemies()
 				u16 rr = enemies[j]->actual_r+2;
 				if(xx*xx+yy*yy<=rr*rr)
 				{
-					// shot
-					// ...
+					// sleigh shot					
+					nTopbar::take_a_heart();
+					cooldown=32;
 				}
 			}
 			if(laser)
 			{
+				u8 shooted = 0;
 				u8* pts = vBuffer::points;				
 				for(int k=0;k<vBuffer::points_count;k++)
 				{
@@ -121,14 +123,29 @@ void MainScene::update_enemies()
 						u16 rr = enemies[j]->actual_r+2;
 						if(xx*xx+yy*yy<=rr*rr)
 						{
+							// shoot enemy
+							shooted++;
 							delete enemies[j];
 							enemies[j]=NULL;
 						}
 					}
 				}
+				if(shooted>0)
+				{
+					nTopbar::add_to_score(1<<(shooted-1));
+				}
 			}
 		}
 	}	
+	if(cooldown)
+	{
+		u8 q = cooldown & 7;
+		if(q<4)
+			nSleigh::show(); 
+		else
+			nSleigh::hide();
+		cooldown--;
+	}
 }
 
 void MainScene::run()
