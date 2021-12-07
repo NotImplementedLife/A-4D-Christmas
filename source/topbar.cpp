@@ -27,8 +27,8 @@ namespace nTopbar
 	
 	
 	static u8 hearts_cnt;
-	static u8 score = 0;
-	static u8 highs = 0;
+	static u16 score = 0;
+	static u16 highs = 0;
 	
 	void fill_hearts()
 	{
@@ -67,21 +67,22 @@ namespace nTopbar
 		}
 	}
 	
-	void add_to_score(u8 ds)
+	void add_to_score(u16 ds)
 	{
 		score+=ds;
 		draw_score(score,12,2);
 	}
 	
+	u16 get_score()
+	{
+		return score;
+	}
 	
 	void init()
 	{		
 		// digits
 		dmaCopy((void*)digitsBitmap,(void*)digits_glyph,digitsBitmapLen);
-		for(u16 i=0;i<640;i++)
-		{
-			digits_glyph[i] |= 64;
-		}
+		for(u16 i=0;i<640;digits_glyph[i++] |= 64);		
 		BG_PALETTE[64] = 0x1825;
 		BG_PALETTE[65] = 0x2FBF;
 

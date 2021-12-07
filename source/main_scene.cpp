@@ -12,7 +12,7 @@
 #include "sleigh.hpp"
 #include "topbar.hpp"
 
-static u16 main_scene_colors[] 
+static const u16 main_scene_colors[16] =  
 {
 	0x0000,0x2FBF,0x1444,0x13E0,0x001F,0x31DF,0x673F,0x01BF,
 	0x7473,0x3A64,0x623A,0x6461,0x615F,0x6C6C,0x636F,0xFF00
@@ -63,10 +63,9 @@ void MainScene::update_enemies()
 	{
 		if(enemies[i]!=NULL)
 		{
+			s16 score = (s16)nTopbar::get_score()-100;
 			enemies[i]->update();
-			//enemies[i]->update();
-			//enemies[i]->update();
-			//enemies[i]->update();			
+			for(u8 i=0;i<3 && score>0;i++,score-=100) enemies[i]->update();			
 			enemies[i]->draw();				
 			if(enemies[i]->y>=(160+enemies[i]->r/2)<<8)
 			{
@@ -161,10 +160,9 @@ void MainScene::run()
 	
 	nSleigh::update();
 	
-	return;
-	
+	//return;
 	//vBuffer::draw_line(120,82,73,80);
-	float k1 = k*0.1;
+	/*float k1 = k*0.1;
 	float k2 = k*0.2;	
 	nSphere::make_sphere(k2,k2, 1,120, 100);
 	nSphere::make_sphere(k2,k2, 20,60);
@@ -173,10 +171,20 @@ void MainScene::run()
 	nSphere::make_sphere(k1,k1, 15,5,150);	
 	//nSphere::make_sphere(0,0);	
 	VBlankIntrWait();
-	vBuffer::draw();
-	k++;
+	vBuffer::draw();	*/
 }
 
+
+MainScene::~MainScene()
+{
+	for(u8 i=0;i<5;i++)
+		if(enemies[i]!=NULL)
+		{
+			delete enemies[i];
+			enemies[i]=NULL;
+		}
+	delete[] enemies;	
+}
 
 
 
