@@ -12,12 +12,6 @@
 #include "sleigh.hpp"
 #include "topbar.hpp"
 
-static const u16 main_scene_colors[16] =  
-{
-	0x0000,0x2FBF,0x1444,0x13E0,0x001F,0x31DF,0x673F,0x01BF,
-	0x7473,0x3A64,0x623A,0x6461,0x615F,0x6C6C,0x636F,0xFF00
-};
-
 MainScene::MainScene()
 {
 	SetMode(MODE_4 | BG2_ON | OBJ_ENABLE | OBJ_1D_MAP);
@@ -26,7 +20,7 @@ MainScene::MainScene()
 		u8 r=4, g=0, b=5;		
 		((u16*)BG_PALETTE)[i]=RGB5(min(31,i+r),min(31,i+g),min(31,i+b));		
 	}		
-	dmaCopy((void*)(main_scene_colors+1),BG_PALETTE+2,30);
+	dmaCopy((void*)(nSphere::sphere_colors+1),BG_PALETTE+2,30);
 	//((u16*)BG_PALETTE)[32]=RGB5(28,0,0);
 	((u16*)BG_PALETTE)[32]=RGB5(31,31,14);	
 	nTopbar::init();
@@ -147,7 +141,7 @@ void MainScene::update_enemies()
 	}
 }
 
-void MainScene::run()
+Scene* MainScene::run()
 {	
 	vBuffer::clear(0,32);
 			
@@ -159,7 +153,7 @@ void MainScene::run()
 	vBuffer::draw();
 	
 	nSleigh::update();
-	
+	return NULL;//new MainScene();
 	//return;
 	//vBuffer::draw_line(120,82,73,80);
 	/*float k1 = k*0.1;
@@ -176,7 +170,7 @@ void MainScene::run()
 
 
 MainScene::~MainScene()
-{
+{	
 	for(u8 i=0;i<5;i++)
 		if(enemies[i]!=NULL)
 		{

@@ -2,8 +2,9 @@
 
 #include <gba.h>
 #include "enemy.hpp"
+#include "scene.hpp"
 
-class MainScene
+class MainScene : public Scene
 {
 private:
 	Enemy** enemies = new Enemy*[5] {NULL, NULL, NULL, NULL, NULL};
@@ -11,13 +12,9 @@ private:
 	u8 cooldown = 0;
 public:
 	MainScene();
-	
 	void update_enemies();
-	
-	void input_handler(bool update_sleigh);
-	
-	void run();	
-	
+	void input_handler(bool update_sleigh);	
+	Scene* run();
 	~MainScene();
 };
 
