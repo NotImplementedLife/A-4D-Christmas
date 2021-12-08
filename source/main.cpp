@@ -6,6 +6,7 @@
 #include "SRAM.hpp"
 #include "main_scene.hpp"
 #include "title_scene.hpp"
+#include "topbar.hpp"
 
 int main(void) 
 {
@@ -13,7 +14,19 @@ int main(void)
 	irqInit();
 	irqEnable(IRQ_VBLANK);
 	
-	//bool ok=nSRAM::check_integrity();
+	if(nSRAM::check_integrity())
+	{
+		u16 highscore = 0;
+		nSRAM::read(&highscore,2,0x10);
+		nTopbar::set_high_score(highscore);
+	}
+	else
+	{
+		u16 highscore = 0;
+		nSRAM::write(&highscore,2,0x10);
+		nTopbar::set_high_score(highscore);
+	}	
+	
 	//iprintf(ok?"Yes":"No");
 		
 	//Scene* scene=new MainScene();

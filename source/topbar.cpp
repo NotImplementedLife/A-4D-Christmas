@@ -3,6 +3,7 @@
 #include "vbuffer.hpp"
 #include "top-bar.h"
 #include "digits.h"
+#include "sram.hpp"
 
 namespace nTopbar
 {
@@ -78,6 +79,16 @@ namespace nTopbar
 		return score;
 	}
 	
+	u16 get_high_score()
+	{
+		return highs;
+	}
+	
+	void set_high_score(u16 hs)
+	{
+		highs=hs;
+	}
+	
 	void init()
 	{		
 		// digits
@@ -110,6 +121,16 @@ namespace nTopbar
 		
 		fill_hearts();
 		draw_score(0,12,2);
-		draw_score(0,12,20);		
+		draw_score(get_high_score(),12,20);
+	}
+	
+	void save_score_if_high()
+	{		
+		u16 score = nTopbar::get_score();
+		if(score>nTopbar::get_high_score())
+		{
+			nSRAM::write(&score,2,0x10);
+			nTopbar::set_high_score(score);
+		}
 	}
 }

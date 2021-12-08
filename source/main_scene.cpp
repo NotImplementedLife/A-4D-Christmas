@@ -11,9 +11,10 @@
 
 #include "sleigh.hpp"
 #include "topbar.hpp"
+#include "title_scene.hpp"
 
 MainScene::MainScene()
-{
+{	
 	SetMode(MODE_4 | BG2_ON | OBJ_ENABLE | OBJ_1D_MAP);
 	for(u16 i=0;i<256;i++)
 	{
@@ -97,7 +98,11 @@ void MainScene::update_enemies()
 				if(xx*xx+yy*yy<=rr*rr)
 				{
 					// sleigh shot					
-					nTopbar::take_a_heart();
+					if(!nTopbar::take_a_heart())
+					{
+						game_over=true;
+						return;
+					}
 					cooldown=32;
 				}
 			}
@@ -145,7 +150,13 @@ Scene* MainScene::run()
 {	
 	vBuffer::clear(0,32);
 			
-	update_enemies();	
+	if(!game_over)
+		update_enemies();	
+	else
+	{
+		nTopbar::save_score_if_high();
+		return new TitleScene();
+	}
 	
 	input_handler(true);
 	
@@ -170,7 +181,7 @@ Scene* MainScene::run()
 
 
 MainScene::~MainScene()
-{	
+{		
 	for(u8 i=0;i<5;i++)
 		if(enemies[i]!=NULL)
 		{
