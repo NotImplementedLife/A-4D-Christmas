@@ -27,6 +27,8 @@ MainScene::MainScene()
 	nTopbar::init();
 	VBlankIntrWait();
 	nSleigh::init();	
+	nSleigh::show();
+	nSleigh::update();
 }
 
 void MainScene::input_handler(bool update_sleigh)
@@ -181,7 +183,9 @@ Scene* MainScene::run()
 
 
 MainScene::~MainScene()
-{		
+{				
+	nSleigh::hide();
+	nSleigh::update();	
 	for(u8 i=0;i<5;i++)
 		if(enemies[i]!=NULL)
 		{

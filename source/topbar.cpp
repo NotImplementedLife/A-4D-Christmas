@@ -91,6 +91,7 @@ namespace nTopbar
 	
 	void init()
 	{		
+		score = 0;
 		// digits
 		dmaCopy((void*)digitsBitmap,(void*)digits_glyph,digitsBitmapLen);
 		for(u16 i=0;i<640;digits_glyph[i++] |= 64);		
