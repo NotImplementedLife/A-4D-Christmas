@@ -106,7 +106,7 @@ export OFILES_BIN := $(addsuffix .o,$(BINFILES))
 
 export OFILES_SOURCES := $(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
 
-export OFILES := $(OFILES_BIN) $(OFILES_SOURCES) $(PNGFILES:.png=.o)
+export OFILES :=  $(PNGFILES:.png=.o) $(OFILES_BIN) $(OFILES_SOURCES)
 
 export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES)))
 
