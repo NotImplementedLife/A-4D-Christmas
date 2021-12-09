@@ -14,8 +14,8 @@ private:
 public:
 	MainScene();
 	void update_enemies();
-	void input_handler(bool update_sleigh);	
-	Scene* run();
+	void input_handler(bool update_sleigh);		
+	Scene* (*run())(void);
 	~MainScene();
 };
 

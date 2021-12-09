@@ -30,6 +30,7 @@ namespace nTopbar
 	static u8 hearts_cnt;
 	static u16 score = 0;
 	static u16 highs = 0;
+	static u32 shot = 0;
 	
 	void fill_hearts()
 	{
@@ -89,6 +90,21 @@ namespace nTopbar
 		highs=hs;
 	}
 	
+	void set_shot_enemies(u32 _shot)
+	{
+		shot = _shot;
+	}
+	
+	u32 get_shot_enemies()
+	{
+		return shot;
+	}
+	
+	void inc_shot_enemies()
+	{
+		shot++;
+	}
+	
 	void init()
 	{		
 		score = 0;
@@ -127,6 +143,8 @@ namespace nTopbar
 	
 	void save_score_if_high()
 	{		
+		u32 enemies = nTopbar::get_shot_enemies();
+		nSRAM::write(&enemies,4,0x12);
 		u16 score = nTopbar::get_score();
 		if(score>nTopbar::get_high_score())
 		{

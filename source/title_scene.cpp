@@ -4,6 +4,7 @@
 #include "sphere.hpp"
 #include "utils.hpp"
 #include "main_scene.hpp"
+#include "credits_scene.hpp"
 
 #include "title-screen.h"
 
@@ -79,7 +80,7 @@ bool TitleScene::input_handler()
 	return false;
 }
 
-Scene* TitleScene::run()
+Scene* (*TitleScene::run())(void)
 {
 	vBuffer::clear(0);
 	float k1 = k*0.1;
@@ -87,7 +88,7 @@ Scene* TitleScene::run()
 	nSphere::make_sphere(k1,k2, 60,120, 80);
 	if(input_handler())			
 	{
-		if (option==ci_play) return new MainScene();
+		if (option==ci_play) return next_MainScene;
 	}
 	u8* wmem = vBuffer::WMEM+16*240;
 	u8* title = (u8*)title_screenBitmap;
@@ -101,7 +102,8 @@ Scene* TitleScene::run()
 	}
 	if(input_handler())			
 	{
-		if (option==ci_play) return new MainScene();
+		if (option==ci_play) return next_MainScene;
+		if (option==ci_credits) return next_CreditsScene;
 	}
 	VBlankIntrWait();
 	vBuffer::draw();	

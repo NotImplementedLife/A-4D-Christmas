@@ -25,7 +25,7 @@ MainScene::MainScene()
 		if(gameover_img[i]) gameover_img[i]+=192;
 	
 	SetMode(MODE_4 | BG2_ON | OBJ_ENABLE | OBJ_1D_MAP);	
-	for(u16 i=0;i<256;i++)
+	for(u16 i=0;i<32;i++)
 	{
 		u8 r=4, g=0, b=5;		
 		((u16*)BG_PALETTE)[i]=RGB5(min(31,i+r),min(31,i+g),min(31,i+b));		
@@ -135,6 +135,7 @@ void MainScene::update_enemies()
 						if(xx*xx+yy*yy<=rr*rr)
 						{
 							// shoot enemy
+							nTopbar::inc_shot_enemies();
 							shooted++;
 							delete enemies[j];
 							enemies[j]=NULL;
@@ -159,7 +160,7 @@ void MainScene::update_enemies()
 	}
 }
 
-Scene* MainScene::run()
+Scene* (*MainScene::run())(void)
 {				
 	if(!game_over)
 	{
@@ -177,7 +178,7 @@ Scene* MainScene::run()
 		VBlankIntrWait();
 		vBuffer::draw();
 		scanKeys();				
-		return keysDown() ? new TitleScene() : NULL;
+		return keysDown() ? next_TitleScene : NULL;
 	}
 	
 	input_handler(true);
@@ -186,7 +187,7 @@ Scene* MainScene::run()
 	vBuffer::draw();
 	
 	nSleigh::update();
-	return NULL; 	
+	return NULL;
 }
 
 

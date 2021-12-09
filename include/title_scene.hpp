@@ -15,5 +15,6 @@ private:
 public:
 	TitleScene();
 	
-	Scene* run();
+	Scene* (*run())(void);
+	//Scene* run();
 };
