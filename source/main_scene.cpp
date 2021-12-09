@@ -13,22 +13,32 @@
 #include "topbar.hpp"
 #include "title_scene.hpp"
 
+#include "game-over.h"
+
+static u8 gameover_img[game_overBitmapLen];
+
 MainScene::MainScene()
 {	
-	SetMode(MODE_4 | BG2_ON | OBJ_ENABLE | OBJ_1D_MAP);
+	vBuffer::clear();
+	dmaCopy(game_overBitmap,gameover_img,game_overBitmapLen);	
+	for(int i=0;i<game_overBitmapLen;i++)
+		if(gameover_img[i]) gameover_img[i]+=192;
+	
+	SetMode(MODE_4 | BG2_ON | OBJ_ENABLE | OBJ_1D_MAP);	
 	for(u16 i=0;i<256;i++)
 	{
 		u8 r=4, g=0, b=5;		
 		((u16*)BG_PALETTE)[i]=RGB5(min(31,i+r),min(31,i+g),min(31,i+b));		
 	}		
 	dmaCopy((void*)(nSphere::sphere_colors+1),BG_PALETTE+2,30);
-	//((u16*)BG_PALETTE)[32]=RGB5(28,0,0);
-	((u16*)BG_PALETTE)[32]=RGB5(31,31,14);	
+	
+	((u16*)BG_PALETTE)[32]=RGB5(31,31,14);		
 	nTopbar::init();
 	VBlankIntrWait();
 	nSleigh::init();	
 	nSleigh::show();
 	nSleigh::update();
+	dmaCopy(game_overPal,BG_PALETTE+192,game_overPalLen);	
 }
 
 void MainScene::input_handler(bool update_sleigh)
@@ -103,6 +113,7 @@ void MainScene::update_enemies()
 					if(!nTopbar::take_a_heart())
 					{
 						game_over=true;
+						nTopbar::save_score_if_high();
 						return;
 					}
 					cooldown=32;
@@ -149,15 +160,24 @@ void MainScene::update_enemies()
 }
 
 Scene* MainScene::run()
-{	
-	vBuffer::clear(0,32);
-			
+{				
 	if(!game_over)
-		update_enemies();	
+	{
+		vBuffer::clear(0,42);
+		update_enemies();
+	}
 	else
 	{
-		nTopbar::save_score_if_high();
-		return new TitleScene();
+		for(int y=0;y<10;y++)
+			for(int x=0;x<64;x++)
+			{
+				if(gameover_img[64*y+x])
+					vBuffer::WMEM[88+x+240*(75+y)]=gameover_img[64*y+x];
+			}
+		VBlankIntrWait();
+		vBuffer::draw();
+		scanKeys();				
+		return keysDown() ? new TitleScene() : NULL;
 	}
 	
 	input_handler(true);
@@ -166,19 +186,7 @@ Scene* MainScene::run()
 	vBuffer::draw();
 	
 	nSleigh::update();
-	return NULL;//new MainScene();
-	//return;
-	//vBuffer::draw_line(120,82,73,80);
-	/*float k1 = k*0.1;
-	float k2 = k*0.2;	
-	nSphere::make_sphere(k2,k2, 1,120, 100);
-	nSphere::make_sphere(k2,k2, 20,60);
-	nSphere::make_sphere(k1,k1, 20,180);
-	nSphere::make_sphere(k1,k1, 10,120);	
-	nSphere::make_sphere(k1,k1, 15,5,150);	
-	//nSphere::make_sphere(0,0);	
-	VBlankIntrWait();
-	vBuffer::draw();	*/
+	return NULL; 	
 }
 
 
