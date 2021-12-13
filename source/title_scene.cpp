@@ -68,14 +68,14 @@ void TitleScene::prev_option()
 }
 
 bool TitleScene::input_handler()
-{
-	scanKeys();
-	u16 keys_down = keysDown();
+{		
+	scanKeys();	
+	u16 keys_down = keysDown();	
 	if(keys_down & KEY_UP)
-		prev_option();
+		prev_option();		
 	else if(keys_down & KEY_DOWN)
-		next_option();
-	else if(keys_down & (KEY_START | KEY_A))
+		next_option();		
+	else if((keys_down & KEY_START) || (keys_down & KEY_A))
 		return true;
 	return false;
 }
@@ -89,6 +89,8 @@ Scene* (*TitleScene::run())(void)
 	if(input_handler())			
 	{
 		if (option==ci_play) return next_MainScene;
+		if (option==ci_credits) return next_CreditsScene;
+		if (option==ci_tutorial) return next_TutorialScene;
 	}
 	u8* wmem = vBuffer::WMEM+16*240;
 	u8* title = (u8*)title_screenBitmap;
@@ -104,6 +106,7 @@ Scene* (*TitleScene::run())(void)
 	{
 		if (option==ci_play) return next_MainScene;
 		if (option==ci_credits) return next_CreditsScene;
+		if (option==ci_tutorial) return next_TutorialScene;
 	}
 	VBlankIntrWait();
 	vBuffer::draw();	

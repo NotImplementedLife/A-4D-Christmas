@@ -17,3 +17,4 @@ public:
 Scene* next_TitleScene();
 Scene* next_CreditsScene();
 Scene* next_MainScene();
+Scene* next_TutorialScene();
