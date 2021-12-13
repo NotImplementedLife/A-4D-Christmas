@@ -14,6 +14,7 @@ namespace nTopbar
 	const u16 cl_disabled = 0x1825;
 	
 	const u16 cl_inactive_border = 0x1404;
+	const u16 cl_active_border = 0x0FF0;
 	
 	const u16 cl_progress_bg = 0x673F;
 	const u16 cl_progress_fill = 0x01BF;
@@ -32,15 +33,33 @@ namespace nTopbar
 	static u16 highs = 0;
 	static u32 shot = 0;
 	
+	static u8 progress_bar = 0;
+	
 	void fill_hearts()
 	{
 		hearts_cnt = 3;
 		BG_PALETTE[ci_heart[0]] = BG_PALETTE[ci_heart[1]] = BG_PALETTE[ci_heart[2]] = cl_heart;
 	}
 	
+	void draw_progress_bar() {
+		for(int i=0;i<progress_bar;i++)			
+			vBuffer::WMEM[10*240+72+i] = 
+			vBuffer::WMEM[11*240+72+i] = 
+			vBuffer::WMEM[12*240+72+i] = 
+			vBuffer::WMEM[13*240+72+i] = ci_progress_fill;
+		for(int i=progress_bar;i<64;i++)
+			vBuffer::WMEM[10*240+72+i] = 
+			vBuffer::WMEM[11*240+72+i] = 
+			vBuffer::WMEM[12*240+72+i] = 
+			vBuffer::WMEM[13*240+72+i] = ci_progress_bg;
+	}	
+	
+	
 	u8 take_a_heart()
 	{
 		if(hearts_cnt==0) return -1;
+		progress_bar>>=1;
+		draw_progress_bar();
 		BG_PALETTE[ci_heart[--hearts_cnt]] = cl_disabled;
 		return hearts_cnt;
 	}
@@ -135,6 +154,7 @@ namespace nTopbar
 		BG_PALETTE[ci_progress_border] = cl_inactive_border;
 		BG_PALETTE[ci_progress_bg] = cl_progress_bg;
 		BG_PALETTE[ci_progress_fill] = cl_progress_fill;
+		BG_PALETTE[ci_L] = cl_inactive_border;	
 		
 		fill_hearts();
 		draw_score(0,12,2);
@@ -151,5 +171,35 @@ namespace nTopbar
 			nSRAM::write(&score,2,0x10);
 			nTopbar::set_high_score(score);
 		}
-	}
+	}	
+	
+	void update_progress_bar(bool inc) {
+		static u8 q=0;
+		if(inc) {
+			if(progress_bar<64) {
+				progress_bar++;
+				draw_progress_bar();
+			}
+		}
+		if(progress_bar==64) {
+			q++;
+			if(q%4==0) {
+				BG_PALETTE[ci_progress_border] = BG_PALETTE[ci_L] = cl_inactive_border;	
+			}
+			else if(q%2==0) {
+				BG_PALETTE[ci_progress_border] = BG_PALETTE[ci_L] = cl_active_border;
+			}
+		}
+		else {
+			BG_PALETTE[ci_progress_border] = BG_PALETTE[ci_L] = cl_inactive_border;
+		}
+	}		
 }
+
+
+
+
+
+
+
+

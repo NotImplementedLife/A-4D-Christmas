@@ -94,8 +94,9 @@ void MainScene::update_enemies()
 		input_handler(i==3);		
 		//VBlankIntrWait();		
 	}	
-	if(laser)
+	if(laser && !cooldown)
 		vBuffer::draw_line(nSleigh::x+16,nSleigh::y+16,120,50,32);
+	u8 shooted = 0;
 	for(int j=0;j<5;j++)
 	{
 		if(!cooldown && enemies[j]!=NULL)
@@ -120,8 +121,7 @@ void MainScene::update_enemies()
 				}
 			}
 			if(laser)
-			{
-				u8 shooted = 0;
+			{				
 				u8* pts = vBuffer::points;				
 				for(int k=0;k<vBuffer::points_count;k++)
 				{
@@ -139,15 +139,17 @@ void MainScene::update_enemies()
 							shooted++;
 							delete enemies[j];
 							enemies[j]=NULL;
+							break;
 						}
 					}
-				}
-				if(shooted>0)
-				{
-					nTopbar::add_to_score(1<<(shooted-1));
-				}
+				}				
 			}
 		}
+		if(shooted>0)
+		{
+			nTopbar::add_to_score(1<<(shooted-1));
+		}
+		nTopbar::update_progress_bar(shooted>0);
 	}	
 	if(cooldown)
 	{

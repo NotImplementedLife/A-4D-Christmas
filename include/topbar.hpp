@@ -16,4 +16,6 @@ namespace nTopbar
 	void set_shot_enemies(u32 _shot);		
 	u32 get_shot_enemies();	
 	void inc_shot_enemies();
+	
+	void update_progress_bar(bool inc=false);
 }

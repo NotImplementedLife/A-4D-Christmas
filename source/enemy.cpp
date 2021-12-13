@@ -26,5 +26,5 @@ void Enemy::update()
 
 void Enemy::draw()
 {	
-	nSphere::make_sphere(T, P, actual_r, x>>8, y>>8);
+	nSphere::make_sphere(T, P, actual_r, x>>8, y>>8);	
 }
