@@ -18,4 +18,8 @@ namespace nTopbar
 	void inc_shot_enemies();
 	
 	void update_progress_bar(bool inc=false);
+	
+	bool is_combo();
+	
+	void reset_progress_bar();
 }

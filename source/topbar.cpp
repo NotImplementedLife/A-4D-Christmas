@@ -42,7 +42,7 @@ namespace nTopbar
 	}
 	
 	void draw_progress_bar() {
-		for(int i=0;i<progress_bar;i++)			
+		for(int i=0;i<progress_bar;i++)	
 			vBuffer::WMEM[10*240+72+i] = 
 			vBuffer::WMEM[11*240+72+i] = 
 			vBuffer::WMEM[12*240+72+i] = 
@@ -124,6 +124,45 @@ namespace nTopbar
 		shot++;
 	}
 	
+	void save_score_if_high()
+	{		
+		u32 enemies = nTopbar::get_shot_enemies();
+		nSRAM::write(&enemies,4,0x12);
+		u16 score = nTopbar::get_score();
+		if(score>nTopbar::get_high_score())
+		{
+			nSRAM::write(&score,2,0x10);
+			nTopbar::set_high_score(score);
+		}
+	}	
+	
+	void update_progress_bar(bool inc) {
+		static u8 q=0;
+		if(inc) {
+			if(progress_bar<64) {
+				progress_bar++;
+				draw_progress_bar();
+			}
+		}
+		if(progress_bar==64) {
+			q++;
+			if(q%4==0) {
+				BG_PALETTE[ci_progress_border] = BG_PALETTE[ci_L] = cl_inactive_border;	
+			}
+			else if(q%2==0) {
+				BG_PALETTE[ci_progress_border] = BG_PALETTE[ci_L] = cl_active_border;
+			}
+		}
+		else {
+			BG_PALETTE[ci_progress_border] = BG_PALETTE[ci_L] = cl_inactive_border;
+		}
+	}	
+
+	void init_progress_bar() {
+		progress_bar = 0;
+		update_progress_bar(true);
+	}
+	
 	void init()
 	{		
 		score = 0;
@@ -159,40 +198,16 @@ namespace nTopbar
 		fill_hearts();
 		draw_score(0,12,2);
 		draw_score(get_high_score(),12,20);
+		
+		init_progress_bar();
 	}
 	
-	void save_score_if_high()
-	{		
-		u32 enemies = nTopbar::get_shot_enemies();
-		nSRAM::write(&enemies,4,0x12);
-		u16 score = nTopbar::get_score();
-		if(score>nTopbar::get_high_score())
-		{
-			nSRAM::write(&score,2,0x10);
-			nTopbar::set_high_score(score);
-		}
-	}	
+	bool is_combo() { return progress_bar==64;}
 	
-	void update_progress_bar(bool inc) {
-		static u8 q=0;
-		if(inc) {
-			if(progress_bar<64) {
-				progress_bar++;
-				draw_progress_bar();
-			}
-		}
-		if(progress_bar==64) {
-			q++;
-			if(q%4==0) {
-				BG_PALETTE[ci_progress_border] = BG_PALETTE[ci_L] = cl_inactive_border;	
-			}
-			else if(q%2==0) {
-				BG_PALETTE[ci_progress_border] = BG_PALETTE[ci_L] = cl_active_border;
-			}
-		}
-		else {
-			BG_PALETTE[ci_progress_border] = BG_PALETTE[ci_L] = cl_inactive_border;
-		}
+	void reset_progress_bar()
+	{
+		progress_bar=0;
+		update_progress_bar(true);	
 	}		
 }
 

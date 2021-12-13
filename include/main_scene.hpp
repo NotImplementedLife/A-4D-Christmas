@@ -11,6 +11,7 @@ private:
 	bool laser = false;
 	u8 cooldown = 0;
 	bool game_over = false;
+	u8 combo_iter = 0;
 public:
 	MainScene();
 	void update_enemies();

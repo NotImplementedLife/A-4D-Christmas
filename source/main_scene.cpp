@@ -1,6 +1,7 @@
 #include "main_scene.hpp"
 
 #include <gba.h>
+#include <fade.h>
 
 #include <stdlib.h>
 
@@ -16,9 +17,11 @@
 #include "game-over.h"
 
 static u8 gameover_img[game_overBitmapLen];
+static u16 white_palette[512];
+static u16 pal_backup[512];
 
 MainScene::MainScene()
-{	
+{		
 	vBuffer::clear();
 	dmaCopy(game_overBitmap,gameover_img,game_overBitmapLen);	
 	for(int i=0;i<game_overBitmapLen;i++)
@@ -38,11 +41,14 @@ MainScene::MainScene()
 	nSleigh::init();	
 	nSleigh::show();
 	nSleigh::update();
-	dmaCopy(game_overPal,BG_PALETTE+192,game_overPalLen);	
+	dmaCopy(game_overPal,BG_PALETTE+192,game_overPalLen);
+	
+	for(int i=0;i<256;i++) white_palette[i]=0x7FFF;
+	dmaCopy(SPRITE_PALETTE,((u8*)white_palette)+512,512);
 }
 
 void MainScene::input_handler(bool update_sleigh)
-{
+{	
 	scanKeys();
 	u16 keys_down = keysDown();
 	u16 keys_held = keysHeld();
@@ -52,6 +58,11 @@ void MainScene::input_handler(bool update_sleigh)
 	
 	if((keys_up & (KEY_LEFT)) | (keys_up & (KEY_RIGHT)))
 		nSleigh::set_tiles(nSleigh::sprite_0);	
+	
+	if((keys_down & KEY_L) && nTopbar::is_combo()) {
+		nTopbar::reset_progress_bar();
+		combo_iter=1;
+	}
 	
 	if(!update_sleigh) return;
 			
@@ -163,8 +174,25 @@ void MainScene::update_enemies()
 }
 
 Scene* (*MainScene::run())(void)
-{				
-	if(!game_over)
+{					
+	if(combo_iter>0) {
+		if(combo_iter==1) {
+			dmaCopy(BG_PALETTE,pal_backup,512);
+			dmaCopy(SPRITE_PALETTE,((u8*)pal_backup)+512,512);
+			FadeToPalette(white_palette,16);
+			for(int i=0;i<5;i++) {
+				delete enemies[i];
+				enemies[i]=NULL;
+			}
+			vBuffer::clear(0,42);
+			update_enemies();
+			vBuffer::draw();
+			nTopbar::add_to_score(32);
+			FadeToPalette(pal_backup,48);
+			combo_iter=0;
+		}		
+	}
+	else if(!game_over)
 	{
 		vBuffer::clear(0,42);
 		update_enemies();
