@@ -2,6 +2,8 @@
 
 _All I want for Christmas is a playable GBA ROM..._
 
+Get the lastest version [here](https://github.com/NotImplementedLife/A-4D-Christmas/releases/download/v0.1/A-4D-Christmas-0-1.gba).
+
 # The idea
 
 [GBA Winter Jam '21](https://itch.io/jam/gba-winter-jam-2021) is coming, so I made this little crappy GBA ROM. This will most probably be my last game released in 2021, and it's a very good chance to celebrate both the Christmas and almost 1 year of me being in the homebrew scene.
