@@ -22,6 +22,7 @@ static u16 pal_backup[512];
 
 MainScene::MainScene()
 {		
+	sleigh_anim=0;
 	vBuffer::clear();
 	dmaCopy(game_overBitmap,gameover_img,game_overBitmapLen);	
 	for(int i=0;i<game_overBitmapLen;i++)
@@ -199,6 +200,12 @@ Scene* (*MainScene::run())(void)
 	}
 	else
 	{
+		if(sleigh_anim<72)
+		{
+			sleigh_anim++;
+			nSleigh::set_tiles(576 + 32*(sleigh_anim/8));
+			nSleigh::update();
+		}
 		for(int y=0;y<10;y++)
 			for(int x=0;x<64;x++)
 			{

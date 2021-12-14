@@ -63,10 +63,11 @@ namespace nSleigh
 	
 	void init()
 	{
-		dmaCopy((void*)sleigh_spriteTiles,(void*)0x06014000,sleigh_spriteTilesLen);	
+		dmaCopy((void*)sleigh_spriteTiles,(void*)0x06014000,sleigh_spriteTilesLen);
 		dmaCopy((void*)sleigh_spritePal,SPRITE_PALETTE,512);
 		CpuFastSet(obj_buffer, OAM, ((sizeof(OBJATTR))/4)*128 | COPY32);
 		x=104, scr_y=y;
+		set_tiles(sprite_0);
 		update();
 		//spr(sprite_0,,124,0);
 		//updateOAM();		

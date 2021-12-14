@@ -12,6 +12,7 @@ private:
 	u8 cooldown = 0;
 	bool game_over = false;
 	u8 combo_iter = 0;
+	u8 sleigh_anim = 0;
 public:
 	MainScene();
 	void update_enemies();
