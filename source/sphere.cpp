@@ -140,8 +140,7 @@ namespace nSphere
 		if(t.draw2) vBuffer::draw_line(x2,y2,x3,y3,min(z2,z3));
 		if(t.draw3) vBuffer::draw_line(x3,y3,x1,y1,min(z3,z1));
 	}		
-	
-	
+			
 	void make_sphere(float rotX,float rotY,int scale, int center_x,int center_y)
 	{		
 		float sinX = sin(rotX), cosX = cos(rotX);

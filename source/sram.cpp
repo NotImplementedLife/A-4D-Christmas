@@ -21,7 +21,8 @@ namespace nSRAM
 	const char* save_type = "SRAM_V113";		
 	const char save_key[17] = "mPfj3OH2gqxQy0b9";
 	
-	void _copy(const uint8_t* source, int size, uint8_t* destination)
+	/// https://devkitpro.org/viewtopic.php?t=8913
+	__attribute__((section(".iwram"))) void _copy(const uint8_t* source, int size, uint8_t* destination)
 	{
 		// This code *maybe* should be in WRAM:
 		// http://problemkaputt.de/gbatek.htm#gbacartbackupsramfram (Reading and Writing section)
@@ -35,7 +36,7 @@ namespace nSRAM
 		}
 	}
 
-	void write(const void* source, int size, int offset)
+	__attribute__((section(".iwram"))) void write(const void* source, int size, int offset)
 	{
 		auto source_ptr = reinterpret_cast<const uint8_t*>(source);
 		auto destination_ptr = reinterpret_cast<uint8_t*>(MEM_SRAM) + offset;
@@ -43,7 +44,7 @@ namespace nSRAM
 	}
 		
 			
-	void read(void* destination, int size, int offset)
+	__attribute__((section(".iwram"))) void read(void* destination, int size, int offset)
 	{
 		auto source_ptr = reinterpret_cast<const uint8_t*>(MEM_SRAM) + offset;
 		auto destination_ptr = reinterpret_cast<uint8_t*>(destination);
