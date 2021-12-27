@@ -2,7 +2,7 @@
 
 _All I want for Christmas is a playable GBA ROM..._
 
-Get the lastest version [here](https://github.com/NotImplementedLife/A-4D-Christmas/releases/download/v0.1/A-4D-Christmas-0-1.gba).
+Get the lastest version [here](https://github.com/NotImplementedLife/A-4D-Christmas/releases/download/v0.1/A-4D-Christmas-0-2.gba).
 
 # The idea
 
