@@ -17,7 +17,7 @@ static const u16 cl_focused = 0x7FFF;
 
 
 TitleScene::TitleScene()
-{
+{	
 	SetMode(MODE_4 | BG2_ON | OBJ_ENABLE | OBJ_1D_MAP);
 	for(u16 i=0;i<256;i++)
 	{

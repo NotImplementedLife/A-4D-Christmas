@@ -10,6 +10,7 @@ public:
 	{
 		u32 _0 = 0;
 		CpuFastSet(&_0, BG_PALETTE, 128 | FILL);
+		CpuFastSet(&_0, (void*)VRAM,2*240*260 | FILL);
 		VBlankIntrWait();
 	}	
 };
