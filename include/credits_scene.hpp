@@ -5,8 +5,6 @@
 
 class CreditsScene : public Scene
 {
-private:
-	
 public:
 	CreditsScene();
 	Scene* (*run())(void);
