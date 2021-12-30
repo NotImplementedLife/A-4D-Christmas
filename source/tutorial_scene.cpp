@@ -19,7 +19,7 @@ __attribute__((target("thumb"))) void text_scene_hblank_handler_tut()
 TutorialScene::TutorialScene()
 {
 	consoleDemoInit();		
-	BG_PALETTE[0]=RGB5(4,0,5);	
+	BG_PALETTE[0]=RGB5(4,0,5);
 	BG_PALETTE[241]= RGB5(31,27,11);//0x2FBF; // Yellow Text
 	iprintf("\033[%d;%dHTutorial\n\n", 1, 11);
 	iprintf("   Left/Right - Move sleigh\n");

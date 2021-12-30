@@ -13,6 +13,7 @@
 #include "sleigh.hpp"
 #include "topbar.hpp"
 #include "title_scene.hpp"
+#include "audio.hpp"
 
 #include "game-over.h"
 
@@ -90,7 +91,7 @@ void MainScene::update_enemies()
 			{
 				delete enemies[i];
 				enemies[i]=NULL;
-			}
+			}			
 		}
 		else
 		{
@@ -100,14 +101,14 @@ void MainScene::update_enemies()
 			u16 dy = 100+rand()%200;
 			enemies[i]=new Enemy(10+rand()%10, dx, dy);
 		}				
-		
-		
-		
 		input_handler(i==3);		
 		//VBlankIntrWait();		
 	}	
 	if(laser && !cooldown)
-		vBuffer::draw_line(nSleigh::x+16,nSleigh::y+16,120,50,32);
+	{		
+		vBuffer::draw_line(nSleigh::x+16,nSleigh::y+16,120,50,32);		
+		play_sound(&laser_sfx);	
+	}
 	u8 shooted = 0;
 	for(int j=0;j<5;j++)
 	{
@@ -126,6 +127,7 @@ void MainScene::update_enemies()
 					if(!nTopbar::take_a_heart())
 					{
 						game_over=true;
+						play_sound(&explosion_sfx);
 						nTopbar::save_score_if_high();
 						return;
 					}
@@ -175,7 +177,7 @@ void MainScene::update_enemies()
 }
 
 Scene* (*MainScene::run())(void)
-{					
+{						
 	if(combo_iter>0) {
 		if(combo_iter==1) {
 			dmaCopy(BG_PALETTE,pal_backup,512);
@@ -196,7 +198,8 @@ Scene* (*MainScene::run())(void)
 	else if(!game_over)
 	{
 		vBuffer::clear(0,42);
-		update_enemies();
+		mmFrame();
+		update_enemies();		
 	}
 	else
 	{
@@ -212,17 +215,17 @@ Scene* (*MainScene::run())(void)
 				if(gameover_img[64*y+x])
 					vBuffer::WMEM[88+x+240*(75+y)]=gameover_img[64*y+x];
 			}
+		mmFrame();
 		VBlankIntrWait();
 		vBuffer::draw();
 		scanKeys();				
 		return keysDown() ? next_TitleScene : NULL;
-	}
-	
+	}	
 	input_handler(true);
-	
+	mmFrame();
 	VBlankIntrWait();
 	vBuffer::draw();
-	
+	mmFrame();
 	nSleigh::update();
 	return NULL;
 }

@@ -7,12 +7,14 @@
 #include "main_scene.hpp"
 #include "title_scene.hpp"
 #include "topbar.hpp"
+#include "audio.hpp"
 
 int main(void) 
-{
+{	
 	srand(time(NULL));
 	irqInit();
-	irqEnable(IRQ_VBLANK);
+	init_sound();	
+	
 	
 	if(nSRAM::check_integrity())
 	{
@@ -31,6 +33,17 @@ int main(void)
 		nTopbar::set_high_score(0);
 		nTopbar::set_shot_enemies(0);
 	}	
+		
+	/*while(1)
+	{
+		scanKeys();
+		if(keysDown() & KEY_A)
+		{
+			play_sound(&laser_sfx);	
+		}
+		mmFrame();
+		VBlankIntrWait();
+	}*/
 		
 	Scene* scene=new TitleScene();	
 	while(1) 
