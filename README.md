@@ -36,6 +36,6 @@ make
  - [Sleigh sprite](https://www.dreamstime.com/stock-photo-composite-image-rear-view-santa-claus-riding-sled-against-snow-falling-fir-tree-forest-image80338564)
  - [Explosion animation effect](https://www.shutterstock.com/ro/image-vector/pixel-art-explosions-game-icons-set-1120961030)
  - [Title screen Christmas decoration](https://previews.123rf.com/images/jut/jut0911/jut091100015/5905054-vector-illustrations-christmas-ornaments-icons.jpg)
- - [Laser SFX](// https://www.soundfishing.eu/sound/laser-gun)
+ - [Laser SFX](https://www.soundfishing.eu/sound/laser-gun)
  - [Explosion SFX](https://elements.envato.com/explosion-powerful-GHDGDPQ?utm_source=mixkit&utm_medium=referral&utm_campaign=elements_mixkit_cs_sfx_tag&_ga=2.127449229.1699470174.1640886970-1747293953.1640886970)
  
